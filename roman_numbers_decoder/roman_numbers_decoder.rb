@@ -2,7 +2,6 @@ require 'pry'
 
 def solution(roman)
   sum = 0
-  to_rest = nil
   numbers = {
     'I': 1,
     'V': 5,
@@ -12,26 +11,16 @@ def solution(roman)
     'D': 500,
     'M': 1000
   }
-  roman = roman.split('')
-  roman.each_with_index do |char, index|
-    # binding.pry
-    if !roman[index + 1].nil? && numbers[char.to_sym] >= numbers[roman[index + 1].to_sym]
-      if to_rest.nil?
-        sum += numbers[char.to_sym]
-      else
-        sum += numbers[char.to_sym] - numbers[roman[index - 1].to_sym]
-        to_rest = nil
-      end
-    else
-      if to_rest.nil?
-        to_rest = numbers[char.to_sym]
-      else
-        sum += numbers[char.to_sym] - numbers[roman[index - 1].to_sym]
-        to_rest = nil
-      end
-    end
+
+  (0..roman.length - 2).each do |i|
+    numbers[roman[i].to_sym] >= numbers[roman[i + 1].to_sym] ?
+      sum += numbers[roman[i].to_sym] :
+      sum -= numbers[roman[i].to_sym]
   end
+
+  sum += numbers[roman[roman.length - 1].to_sym]
+
   sum
 end
 
-puts solution('XXI')
+puts solution('MMVIII')
